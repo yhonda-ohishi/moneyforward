@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PYTHONIOENCODING=utf-8 python c:/moneyforward/scripts/session_start.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__mfc_ca__*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python c:/moneyforward/scripts/log_mf_op.py"
+          },
+          {
+            "type": "command",
+            "command": "python c:/moneyforward/scripts/backup_gdrive.py"
+          }
+        ]
+      }
+    ]
+  }
+}

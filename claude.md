@@ -21,3 +21,8 @@ moneyforwardに関するskillsはこのフォルダに作成
 
 ## 事業者情報
 - 課税方式: **簡易課税**（仕入税額控除は売上から自動計算。適格請求書の有無は仕入側の税額に影響しない）
+
+## MCP制限事項
+- `getConnectedAccounts` は空を返す（銀行連携データはMCPスコープ外）
+- 残高確認は `getReportsTrialBalanceBalanceSheet` で代替する
+- 仕訳の削除APIはない（手動で削除が必要）

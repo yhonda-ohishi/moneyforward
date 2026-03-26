@@ -5,6 +5,14 @@ moneyforwardに関するskillsはこのフォルダに作成
 - [mf-journal](skills/mf-journal/SKILL.md) - 仕訳取得・表示スキル
 - [mf-backup](skills/mf-backup/SKILL.md) - 仕訳バックアップ（変更前に必ず実行）
 
+## 自動化
+
+SessionStart/PostToolUseフック（`.claude/settings.json`）で以下を自動実行:
+
+- **セッション開始時**: 未完了タスク表示、最新バックアップ確認
+- **MCP操作時**: 全操作を `audit-logs/operations/` に自動ログ
+- **Google Drive同期**: backups/ と audit-logs/ を `gdrive:moneyforward/` に自動同期（rclone）
+
 ## 海外サービスの税区分ルール
 
 仕訳チェック時、海外サービスの税区分は以下を基準に判断する。

@@ -12,10 +12,10 @@ const localInvoices = ref<Invoice[]>([])
 const loadingJournals = ref(false)
 const loadError = ref('')
 const resultFilter = ref<ReconcileStatus | 'all'>('all')
+const selectedYear = ref('2026')
+const years = ['2026', '2025']
 
-interface MatchesFile {
-  matches: Record<string, string>
-}
+type MatchesFile = Record<string, Record<string, string>>
 
 const summary = computed(() => {
   const total = results.value.length
@@ -29,26 +29,26 @@ async function loadAndReconcile() {
   loadingJournals.value = true
   loadError.value = ''
   try {
-    parsedTransactions.value = await loadFromBackup()
+    parsedTransactions.value = await loadFromBackup(selectedYear.value)
 
     try {
       localInvoices.value = await loadLocalInvoices()
     } catch { localInvoices.value = [] }
 
-    // matches.json を読み込み
-    let manualMap: Record<string, string> = {}
+    let manualMap: MatchesFile = {}
     try {
-      const data = await $fetch<MatchesFile>('/data/matches.json')
-      manualMap = data.matches || {}
+      manualMap = await $fetch<MatchesFile>('/data/matches.json')
     } catch { /* matches.json がなければ空 */ }
 
-    results.value = reconcileManual(parsedTransactions.value, localInvoices.value, manualMap)
+    results.value = reconcileManual(parsedTransactions.value, localInvoices.value, manualMap, selectedYear.value)
   } catch (e: any) {
     loadError.value = 'バックアップデータの読み込みに失敗しました。'
   } finally {
     loadingJournals.value = false
   }
 }
+
+watch(selectedYear, () => loadAndReconcile())
 
 onMounted(() => {
   loadAndReconcile()
@@ -57,7 +57,20 @@ onMounted(() => {
 
 <template>
   <div class="space-y-6">
-    <h2 class="text-2xl font-bold">突合</h2>
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold">突合</h2>
+      <div class="flex gap-2">
+        <UButton
+          v-for="y in years"
+          :key="y"
+          :variant="selectedYear === y ? 'solid' : 'ghost'"
+          size="sm"
+          @click="selectedYear = y"
+        >
+          {{ y }}年度
+        </UButton>
+      </div>
+    </div>
 
     <div v-if="loadingJournals" class="text-center py-8">
       <UIcon name="i-lucide-loader-2" class="animate-spin text-2xl" />

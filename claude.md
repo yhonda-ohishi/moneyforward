@@ -35,6 +35,11 @@ SessionStart/PostToolUseフック（`.claude/settings.json`）で以下を自動
 ## 事業者情報
 - 課税方式: **簡易課税**（仕入税額控除は売上から自動計算。適格請求書の有無は仕入側の税額に影響しない）
 
+## MCP認証手順
+1. `mfc_ca_authorize` でURLを生成 → ユーザーがブラウザで認証
+2. **`mfc_ca_exchange`** で認可コードをアクセストークンに交換（この手順を忘れないこと）
+3. 取得した `access_token` を各APIに渡す（有効期限: 1時間）
+
 ## MCP制限事項
 - `getConnectedAccounts` は空を返す（銀行連携データはMCPスコープ外）
 - 残高確認は `getReportsTrialBalanceBalanceSheet` で代替する

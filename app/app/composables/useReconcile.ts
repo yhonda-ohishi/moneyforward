@@ -352,9 +352,9 @@ export function useReconcile() {
     return transactions
   }
 
-  /** public/data/journals.json を自動読み込みして MFTransaction[] を返す */
-  async function loadFromBackup(): Promise<MFTransaction[]> {
-    const data = await $fetch<JournalsFile>('/data/journals.json')
+  /** 指定年度の journals.json を読み込み */
+  async function loadFromBackup(year: string = '2026'): Promise<MFTransaction[]> {
+    const data = await $fetch<JournalsFile>(`/data/${year}/journals.json`)
     return parseJournalsJson(data)
   }
 
@@ -416,8 +416,9 @@ export function useReconcile() {
     return results
   }
 
-  /** matches.json のマッピングで突合結果を生成 */
-  function reconcileManual(transactions: MFTransaction[], invoices: Invoice[], manualMap: Record<string, string>): ReconcileResult[] {
+  /** matches.json のマッピングで突合結果を生成（年別対応） */
+  function reconcileManual(transactions: MFTransaction[], invoices: Invoice[], manualMap: Record<string, Record<string, string>>, year: string): ReconcileResult[] {
+    const yearMap = manualMap[year] || {}
     // matches.json のパス（"2026/file.pdf"）→ インボイスへのルックアップ
     // loadLocalInvoices の driveFileId は "/data/invoices/2026/file.pdf"
     const invoiceByShortPath = new Map<string, Invoice>()
@@ -432,7 +433,7 @@ export function useReconcile() {
       if (!tx.needsDocument) {
         return { transaction: tx, status: 'not_applicable' as const }
       }
-      const matchedPath = manualMap[tx.transactionNo]
+      const matchedPath = yearMap[tx.transactionNo]
       if (matchedPath) {
         const inv = invoiceByShortPath.get(matchedPath)
         if (inv) {

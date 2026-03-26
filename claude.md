@@ -5,6 +5,11 @@ moneyforwardに関するskillsはこのフォルダに作成
 - [mf-journal](skills/mf-journal/SKILL.md) - 仕訳取得・表示スキル
 - [mf-backup](skills/mf-backup/SKILL.md) - 仕訳バックアップ（変更前に必ず実行）
 
+## Web App
+- [仕訳ビューア](app/) - Nuxt 4 SPA、バックアップデータの表示・インボイス管理
+- `cd app && npm run dev` でローカル起動（http://localhost:3000）
+- `predev` / `prebuild` で最新バックアップを自動コピー
+
 ## 自動化
 
 SessionStart/PostToolUseフック（`.claude/settings.json`）で以下を自動実行:

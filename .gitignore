@@ -2,3 +2,11 @@ backups/
 references/
 .env
 audit-logs/
+client_secret_*.json
+
+# Nuxt app
+app/node_modules/
+app/.nuxt/
+app/.output/
+app/.env
+app/public/data/

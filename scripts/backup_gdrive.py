@@ -13,6 +13,7 @@ RCLONE = os.path.expanduser("~/bin/rclone.exe")
 SYNC_DIRS = [
     ("c:/moneyforward/backups", "gdrive:moneyforward/backups"),
     ("c:/moneyforward/audit-logs", "gdrive:moneyforward/audit-logs"),
+    ("c:/moneyforward/references", "gdrive:moneyforward/references"),
 ]
 
 

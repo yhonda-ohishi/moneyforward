@@ -16,7 +16,30 @@ SessionStart/PostToolUseフック（`.claude/settings.json`）で以下を自動
 
 - **セッション開始時**: 未完了タスク表示、最新バックアップ確認
 - **MCP操作時**: 全操作を `audit-logs/operations/` に自動ログ
-- **Google Drive同期**: backups/ と audit-logs/ を `gdrive:moneyforward/` に自動同期（rclone）
+- **Google Drive同期**: backups/, audit-logs/, references/ を `gdrive:moneyforward/` に自動同期（rclone）
+
+## 請求書管理
+
+- **PDF配置**: `references/invoices/<year>/<YYYY-MM-DD>_<取引先>.pdf`（発行日ベース命名）
+- **仕訳⇔PDFマップ**: [references/invoices/matches.json](references/invoices/matches.json)（年度別、仕訳No→相対パス）
+- **取得方法**: `mcp__gmail__search_emails` → `read_email` で attachmentId 取得 → `download_attachment`
+- **Gmail MCP再認証**: `npx @gongrzhe/server-gmail-autoauth-mcp auth` 実行後、Claude Code再起動
+- **電帳法メタデータ型**: [app/app/types/invoice.ts](app/app/types/invoice.ts)
+
+### サービス別メール検索クエリ
+
+| サービス | クエリ | 添付形式 |
+|---------|--------|---------|
+| Anthropic Claude.AI | `from:invoice+statements@mail.anthropic.com` | Receipt-XXXX-XXXX-XXXX.pdf |
+| GitHub | `from:noreply@github.com subject:receipt` | github-XXX-receipt-YYYY-MM-DD.pdf |
+| Supabase | `from:invoice+statements@supabase.com` | Receipt-BJJMCD-XXXXX.pdf |
+| SQLBak (Pranas.NET) | `from:noreply@sqlbak.com Payment Received` | payment_XXXXXXX.pdf |
+| Google Cloud | `from:payments-noreply@google.com` | <請求書番号>.pdf |
+
+### 請求書がメール非対応のサービス
+- **税務署（事業税等）**: e-Tax電子納付のため紙/PDF領収書なし → matches.json登録不要
+- **マネーフォワードクラウド利用料**: メール添付なし、顧客ポータル「料金明細→請求書」から手動DL
+- **カゴヤ・ジャパン**: メール添付なし、顧客ポータルから手動DL
 
 ## 海外サービスの税区分ルール
 

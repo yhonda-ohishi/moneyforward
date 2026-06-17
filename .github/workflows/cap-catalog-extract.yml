@@ -1,0 +1,21 @@
+name: cap-catalog extract
+
+# Nuxt 4 SPA は `app/` 配下なので working_directory を渡す。
+# default branch は `master`。
+# Refs ippoan/cap-catalog#29, ippoan/cap-catalog#31
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  extract:
+    uses: ippoan/ci-workflows/.github/workflows/catalog-extract.yml@main
+    with:
+      language: ts
+      working_directory: app

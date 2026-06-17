@@ -11,7 +11,8 @@ on:
     branches: [master]
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 jobs:
   extract:
@@ -19,3 +20,14 @@ jobs:
     with:
       language: ts
       working_directory: app
+
+  # CI 完走後に PR を auto-merge する (Refs ippoan/cap-catalog#29 Phase 1 pattern)。
+  # cross-org caller (yhonda-ohishi → ippoan/ci-workflows) なので `secrets: inherit`
+  # が効かない。CI_APP_ID / CI_APP_PRIVATE_KEY は yhonda-ohishi org secret が前提。
+  auto-merge:
+    needs: [extract]
+    if: github.event_name == 'pull_request'
+    uses: ippoan/ci-workflows/.github/workflows/auto-merge.yml@main
+    secrets:
+      CI_APP_ID: ${{ secrets.CI_APP_ID }}
+      CI_APP_PRIVATE_KEY: ${{ secrets.CI_APP_PRIVATE_KEY }}

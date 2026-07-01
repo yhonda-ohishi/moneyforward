@@ -1,11 +1,14 @@
 
-moneyforwardに関するskillsはこのフォルダに作成
+moneyforwardに関するskillsは `.claude/skills/` に作成する。
+（Claude Codeがrepoを開いた時に自動認識する標準パスのため、CCoW上でも
+skillのトリガーフレーズだけで自動発火する。以前はrepoルート直下の
+`skills/` に置いていたが、そちらは自動認識されないため移設済み。）
 
 ## Skills
-- [mf-journal](skills/mf-journal/SKILL.md) - 仕訳取得・表示スキル
-- [mf-backup](skills/mf-backup/SKILL.md) - 仕訳バックアップ（変更前に必ず実行）
-- [mf-invoice-check](skills/mf-invoice-check/SKILL.md) - 請求書突合チェック（課税仕入の仕訳と受領請求書PDFの突合漏れ・税区分誤りを検出）
-- [mf-invoice-review](skills/mf-invoice-review/SKILL.md) - 仕訳候補1件ごとの登録前確認（貸借バランス・重複懸念）＋登録後の反映確認
+- [mf-journal](.claude/skills/mf-journal/SKILL.md) - 仕訳取得・表示スキル
+- [mf-backup](.claude/skills/mf-backup/SKILL.md) - 仕訳バックアップ（変更前に必ず実行）
+- [mf-invoice-check](.claude/skills/mf-invoice-check/SKILL.md) - 請求書突合チェック（課税仕入の仕訳と受領請求書PDFの突合漏れ・税区分誤りを検出）
+- [mf-invoice-review](.claude/skills/mf-invoice-review/SKILL.md) - 仕訳候補1件ごとの登録前確認（貸借バランス・重複懸念）＋登録後の反映確認
 
 ## Web App
 - [仕訳ビューア](app/) - Nuxt 4 SPA、バックアップデータの表示・インボイス管理

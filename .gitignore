@@ -3,6 +3,8 @@ references/
 .env
 audit-logs/
 client_secret_*.json
+__pycache__/
+*.pyc
 
 # Nuxt app
 app/node_modules/

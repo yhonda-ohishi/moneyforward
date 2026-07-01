@@ -44,7 +44,7 @@ c:\moneyforward\backups\
 MCP結果が一時ファイルに保存された場合（大量データ時）、スクリプトで自動保存する:
 
 ```bash
-python c:/moneyforward/skills/mf-backup/scripts/backup.py <一時ファイルパス> --reason "変更理由"
+python c:/moneyforward/.claude/skills/mf-backup/scripts/backup.py <一時ファイルパス> --reason "変更理由"
 ```
 
 結果が直接返ってきた場合は、手動でjournals.jsonとbackup_info.jsonを作成してもよい。

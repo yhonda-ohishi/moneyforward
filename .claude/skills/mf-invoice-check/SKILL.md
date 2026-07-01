@@ -41,7 +41,7 @@ app 側 (Nuxt UI) のロジックを変更した場合は、`scripts/check_invoi
 ### Step 4: 突合スクリプトを実行
 
 ```bash
-python c:/moneyforward/skills/mf-invoice-check/scripts/check_invoices.py c:/moneyforward/audit-logs/tmp_journals_check.json --year 2026
+python c:/moneyforward/.claude/skills/mf-invoice-check/scripts/check_invoices.py c:/moneyforward/audit-logs/tmp_journals_check.json --year 2026
 ```
 
 引数を省略した場合は `backups/` 配下の最新バックアップを自動で使う（`mf-backup` を

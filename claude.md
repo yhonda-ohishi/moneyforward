@@ -5,6 +5,7 @@ moneyforwardに関するskillsはこのフォルダに作成
 - [mf-journal](skills/mf-journal/SKILL.md) - 仕訳取得・表示スキル
 - [mf-backup](skills/mf-backup/SKILL.md) - 仕訳バックアップ（変更前に必ず実行）
 - [mf-invoice-check](skills/mf-invoice-check/SKILL.md) - 請求書突合チェック（課税仕入の仕訳と受領請求書PDFの突合漏れ・税区分誤りを検出）
+- [mf-invoice-review](skills/mf-invoice-review/SKILL.md) - 仕訳候補1件ごとの登録前確認（貸借バランス・重複懸念）＋登録後の反映確認
 
 ## Web App
 - [仕訳ビューア](app/) - Nuxt 4 SPA、バックアップデータの表示・インボイス管理

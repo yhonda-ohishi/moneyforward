@@ -12,3 +12,6 @@ app/.nuxt/
 app/.output/
 app/.env
 app/public/data/
+
+# セッション引き継ぎメモ (ローカル専用・実データを含む)
+handoff/

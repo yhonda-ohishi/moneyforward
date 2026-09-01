@@ -9,6 +9,12 @@ skillのトリガーフレーズだけで自動発火する。以前はrepoル�
 - [mf-backup](.claude/skills/mf-backup/SKILL.md) - 仕訳バックアップ（変更前に必ず実行）
 - [mf-invoice-check](.claude/skills/mf-invoice-check/SKILL.md) - 請求書突合チェック（課税仕入の仕訳と受領請求書PDFの突合漏れ・税区分誤りを検出）
 - [mf-invoice-review](.claude/skills/mf-invoice-review/SKILL.md) - 仕訳候補1件ごとの登録前確認（貸借バランス・重複懸念）＋登録後の反映確認
+- [repo-cwd-guard](.claude/skills/repo-cwd-guard/SKILL.md) - 起動ディレクトリの確認（cwd 外だと MCP と hooks が黙って無効になる）
+
+## セッション引き継ぎ
+
+セッション開始時に `handoff/` の最新ファイル（`handoff/YYYY-MM-DD.md`）を読む。
+作業を中断するときは同じ形式で追記する。実データを含むためローカル専用（gitignore 済み）。
 
 ## Web App
 - [仕訳ビューア](app/) - Nuxt 4 SPA、バックアップデータの表示・インボイス管理

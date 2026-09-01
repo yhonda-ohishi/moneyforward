@@ -9,6 +9,7 @@ skillのトリガーフレーズだけで自動発火する。以前はrepoル�
 - [mf-backup](.claude/skills/mf-backup/SKILL.md) - 仕訳バックアップ（変更前に必ず実行）
 - [mf-invoice-check](.claude/skills/mf-invoice-check/SKILL.md) - 請求書突合チェック（課税仕入の仕訳と受領請求書PDFの突合漏れ・税区分誤りを検出）
 - [mf-invoice-review](.claude/skills/mf-invoice-review/SKILL.md) - 仕訳候補1件ごとの登録前確認（貸借バランス・重複懸念）＋登録後の反映確認
+- [mf-invoice-fetch](.claude/skills/mf-invoice-fetch/SKILL.md) - 受領請求書PDFの取得・登録（Gmail添付＋顧客ポータル。突合の未登録を埋める）
 - [repo-cwd-guard](.claude/skills/repo-cwd-guard/SKILL.md) - 起動ディレクトリの確認（cwd 外だと MCP と hooks が黙って無効になる）
 
 ## セッション引き継ぎ
@@ -47,10 +48,36 @@ SessionStart/PostToolUseフック（`.claude/settings.json`）で以下を自動
 | SQLBak (Pranas.NET) | `from:noreply@sqlbak.com Payment Received` | payment_XXXXXXX.pdf |
 | Google Cloud | `from:payments-noreply@google.com` | <請求書番号>.pdf |
 
-### 請求書がメール非対応のサービス
+### 請求書がメール非対応のサービス（顧客ポータルから取得）
+
+取得手順の詳細は [mf-invoice-fetch](.claude/skills/mf-invoice-fetch/SKILL.md) 参照。
+Chrome MCP（`mcp__claude-in-chrome__*`）でログイン済みセッションを使う。
+
+| サービス | ポータルURL | 取得方法 |
+|---------|-----------|---------|
+| マネーフォワード クラウド利用料 | `https://erp.moneyforward.com/office_usage_detail_statements` | 料金明細→請求書。**PDFなし・印刷のみ** → HTML保存してローカルでPDF化 |
+| カゴヤ・ジャパン | `https://kagoyaid.kagoya.jp/kagoyaid/invoice_list/<アカウント別トークン>` | 請求管理。年月選択→チェック→ダウンロード→**PDFが新規タブで開く**ので fetch して保存 |
+| Amazon | `https://www.amazon.co.jp/gp/css/summary/print.html?orderID=<注文番号>` | 領収書ページ。注文番号は仕訳の摘要にある。**PDFなし** → HTML保存してPDF化 |
+| スイッチサイエンス | `https://menu.switch-science.com/#/menu/<注文別トークン>/download` | 注文後メニュー→書類ダウンロード→「納品書兼適格請求書【インボイス】」。トークンは注文確認メールの認証URL経由で取得 |
+
 - **税務署（事業税等）**: e-Tax電子納付のため紙/PDF領収書なし → matches.json登録不要
-- **マネーフォワードクラウド利用料**: メール添付なし、顧客ポータル「料金明細→請求書」から手動DL
-- **カゴヤ・ジャパン**: メール添付なし、顧客ポータルから手動DL
+- **飲食店等の紙レシート**: スキャンが必要
+
+### 日付の対応関係（カード請求日 → 請求書の発行日）
+
+ファイル名は請求書PDF内の**発行日**を使う。カード請求日とはずれる。
+
+| サービス | 例 |
+|---------|---|
+| マネーフォワード | 仕訳 2026-07-05 ← 請求日 2026-06-30 ← 発行日 2026-07-03 |
+| カゴヤ・ジャパン | 仕訳 2026-05-08 ← 2026年4月分 ← 発行日 2026-04-30 |
+| Google Cloud | 仕訳 2026-07-01 ← 2026年6月分 ← 発行日 2026-06-30 |
+
+### Google Cloud の請求先アカウント
+
+`0167AE-67A318-FEC0D4` と `01833F-DE3AE7-E73305` の2つがあり毎月2通メールが届くが、
+2026年4月請求分以降 `0167AE` は **¥0**。課金は `01833F` のみで仕訳も月1件。
+¥0 の請求書は matches.json に登録しない。
 
 ## 海外サービスの税区分ルール
 
